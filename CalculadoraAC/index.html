@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -236,3 +237,20 @@
             recMultisplit.classList.add('hidden');
             recDucts.classList.add('hidden');
             recVrf.classList.add('hidden');
+
+            if (btu <= 0) {
+                recommendationContainer.classList.add('hidden');
+                return;
+            }
+            
+            recommendationContainer.classList.remove('hidden');
+
+            if (btu <= 24000) { recSplit.classList.remove('hidden'); }
+            if (btu >= 24000 && btu <= 60000) { recMultisplit.classList.remove('hidden'); }
+            if (btu >= 36000) { recDucts.classList.remove('hidden'); }
+            if (btu > 60000) { recVrf.classList.remove('hidden'); }
+        }
+    </script>
+</body>
+</html>
+0
