@@ -1,20 +1,3 @@
-{
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
-
-<!-- ====================================================================== -->
-<!-- PASO 3: Crea otro archivo nuevo, pega este contenido y guárdalo como -->
-<!-- sw.js (Service Worker) en el mismo directorio que los otros archivos -->
-<!-- ====================================================================== -->
 const CACHE_NAME = 'calculadora-ac-cache-v1';
 const urlsToCache = [
   '/',
@@ -25,3 +8,28 @@ const urlsToCache = [
 ];
 
 // Instalar el Service Worker y guardar los archivos en caché
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Cache abierto');
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
+
+// Interceptar las peticiones y servir desde la caché si es posible
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Si encontramos una coincidencia en la caché, la devolvemos
+        if (response) {
+          return response;
+        }
+        // Si no, hacemos la petición a la red
+        return fetch(event.request);
+      }
+    )
+  );
+});
